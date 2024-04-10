@@ -36,6 +36,9 @@ class Arithmetic
                         $result = intval($frameManager->getValue($arg2)) - intval($frameManager->getValue($arg3));
                         $frameManager->updateVariable($arg1['value'],'int',$result);
                     }
+                    else {
+                        throw new OperandTypeError();
+                    }
                     break;
                 case 'MUL':
                     $arg3 = $instruction['args']['arg3'];
@@ -43,6 +46,9 @@ class Arithmetic
                     {
                         $result = intval($frameManager->getValue($arg2)) * intval($frameManager->getValue($arg3));
                         $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    else {
+                        throw new OperandTypeError();
                     }
                     break;
                 case 'IDIV':
@@ -53,6 +59,9 @@ class Arithmetic
                             throw new  InvalidOperandError();
                         $result = intdiv(intval($frameManager->getValue($arg2)),intval($frameManager->getValue($arg3)));
                         $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    else {
+                        throw new OperandTypeError();
                     }
                     break;
                 case 'LT':
@@ -86,7 +95,7 @@ class Arithmetic
                             $value2 = $frameManager->getValue($arg2) === 'true' ? 1 : 0;
                             $value3 = $frameManager->getValue($arg3) === 'true' ? 1 : 0;
                             $result = $value2 > $value3;
-                    } elseif ($$frameManager->getType($arg2) === 'string' && $frameManager->getType($arg3) === 'string') {
+                    } elseif ($frameManager->getType($arg2) === 'string' && $frameManager->getType($arg3) === 'string') {
                         // Сравнение для строк
                         $result = strcmp($frameManager->getValue($arg2), $frameManager->getValue($arg3)) > 0;
                     } else {

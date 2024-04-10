@@ -11,6 +11,7 @@ use IPP\Core\Exception\XMLException;
 use IPP\Student\XmlInterpreter\XmlInterpreter;
 use IPP\Core\Exception\IPPException;
 use IPP\Student\InstructionManager\FrameManager;
+use IPP\Student\InstructionManager\StackManager;
 use IPP\Student\InstructionManager\InstructionsClasses\Arithmetic;
 use IPP\Student\InstructionManager\InstructionsClasses\ControlFlow;
 use IPP\Student\InstructionManager\InstructionsClasses\DataStack;
@@ -25,6 +26,7 @@ class InstructionManager
 {
 
     protected FrameManager $frameManager;
+    protected StackManager $stackManager;
     protected array $MemoryFrameArray = [];
     protected array $DataStackArray = [];
     protected array $ArithmeticArray = [];
@@ -78,7 +80,7 @@ class InstructionManager
         if (in_array($opcode, $this->MemoryFrameArray)) {
             MemoryFrame::handleInstruction($instruction, $jumpManager,$this->frameManager);
         } elseif (in_array($opcode, $this->DataStackArray)) {
-            DataStack::handleInstruction($instruction, $jumpManager);
+            DataStack::handleInstruction($instruction, $this->stackManager,$this->frameManager);
         } elseif (in_array($opcode, $this->ArithmeticArray)) {
             Arithmetic::handleInstruction($instruction, $jumpManager,$this->frameManager);
         } elseif (in_array($opcode, $this->IOArray)) {

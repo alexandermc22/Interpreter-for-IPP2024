@@ -1,48 +1,201 @@
 <?php
 
 namespace IPP\Student\InstructionManager\InstructionsClasses;
+
+use IPP\Core\Exception\IPPException;
 use IPP\Student\InstructionManager\JumpManager;
+use IPP\Student\InstructionManager\FrameManager;
+use IPP\Student\Exception\OperandTypeError;
+use IPP\Student\Exception\InvalidOperandError;
+use IPP\Student\Exception\StringOperationError;
 class Arithmetic
 {
-    public static function handleInstruction(array $instruction, JumpManager $jumpManager)
-    {
-        switch ($instruction['opcode']) {
-            case 'ADD':
-                // Обработка инструкции ADD
-                break;
-            case 'SUB':
-                // Обработка инструкции SUB
-                break;
-            case 'MUL':
-                // Обработка инструкции MUL
-                break;
-            case 'IDIV':
-                // Обработка инструкции IDIV
-                break;
-            case 'LT':
-                // Обработка инструкции LT
-                break;
-            case 'GT':
-                // Обработка инструкции GT
-                break;
-            case 'EQ':
-                // Обработка инструкции EQ
-                break;
-            case 'AND':
-                // Обработка инструкции AND
-                break;
-            case 'OR':
-                // Обработка инструкции OR
-                break;
-            case 'NOT':
-                // Обработка инструкции NOT
-                break;
-            case 'INT2CHAR':
-                // Обработка инструкции INT2CHAR
-                break;
-            case 'STRI2INT':
-                // Обработка инструкции STRI2INT
-                break;
+    public static function handleInstruction(array $instruction, JumpManager $jumpManager,FrameManager $frameManager)
+    {  
+        try
+        {
+            $arg1 = $instruction['args']['arg1'];
+            $arg2 = $instruction['args']['arg2'];
+            $arg3 = $instruction['args']['arg3'];
+            switch ($instruction['opcode']) {
+                case 'ADD':
+                    if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
+                    {
+                        $result= intval($frameManager->getValue($arg2)) + intval($frameManager->getValue($arg3));
+                        $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    else
+                    {
+                        throw new OperandTypeError();
+                    }
+                    break;
+                case 'SUB':
+                    if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
+                    {
+                        $result = intval($frameManager->getValue($arg2)) - intval($frameManager->getValue($arg3));
+                        $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    break;
+                case 'MUL':
+                    if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
+                    {
+                        $result = intval($frameManager->getValue($arg2)) * intval($frameManager->getValue($arg3));
+                        $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    break;
+                case 'IDIV':
+                    if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
+                    {
+                        if(intval($frameManager->getValue($arg3)===0))
+                            throw new  InvalidOperandError();
+                        $result = intdiv(intval($frameManager->getValue($arg2)),intval($frameManager->getValue($arg3)));
+                        $frameManager->updateVariable($arg1['value'],'int',$result);
+                    }
+                    break;
+                case 'LT':
+                    // Проверяем типы аргументов
+                    if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
+                        // Сравнение для целых чисел
+                        $result = intval($frameManager->getValue($arg2)) < intval($frameManager->getValue($arg3));
+                    } elseif ($frameManager->getType($arg2) === 'bool' && $frameManager->getType($arg3) === 'bool') {
+                        // Сравнение для булевых значений
+                            $value2 = $frameManager->getValue($arg2) === 'true' ? 1 : 0;
+                            $value3 = $frameManager->getValue($arg3) === 'true' ? 1 : 0;
+                            $result = $value2 < $value3 ;
+                    } elseif ($frameManager->getType($arg2) === 'string' && $frameManager->getType($arg3) === 'string') {
+                        // Сравнение для строк
+                        $result = strcmp($frameManager->getValue($arg2), $frameManager->getValue($arg3)) < 0;
+                    } else {
+                        throw new OperandTypeError();
+                    }
+                    $result= $result? 'true' : 'false';
+                    $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                    break;                    
+                case 'GT':
+                    // Проверяем типы аргументов
+                    if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
+                        // Сравнение для целых чисел
+                        $result = intval($frameManager->getValue($arg2)) > intval($frameManager->getValue($arg3));
+                    } elseif ($frameManager->getType($arg2) === 'bool' && $frameManager->getType($arg3) === 'bool') {
+                        // Сравнение для булевых значений
+                            $value2 = $frameManager->getValue($arg2) === 'true' ? 1 : 0;
+                            $value3 = $frameManager->getValue($arg3) === 'true' ? 1 : 0;
+                            $result = $value2 > $value3;
+                    } elseif ($$frameManager->getType($arg2) === 'string' && $frameManager->getType($arg3) === 'string') {
+                        // Сравнение для строк
+                        $result = strcmp($frameManager->getValue($arg2), $frameManager->getValue($arg3)) > 0;
+                    } else {
+                        throw new OperandTypeError();
+                    }
+                    $result= $result? 'true' : 'false';
+                    $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                    break;
+                case 'EQ':
+                        // Проверяем типы аргументов
+                    if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
+                        // Сравнение для целых чисел
+                        $result = intval($frameManager->getValue($arg2)) === intval($frameManager->getValue($arg3));
+                    } elseif ($frameManager->getType($arg2) === 'bool' && $frameManager->getType($arg3) === 'bool') {
+                        // Сравнение для булевых значений
+                        $result = $frameManager->getValue($arg2) === $frameManager->getValue($arg3);
+                    } elseif ($frameManager->getType($arg2)=== 'string' && $frameManager->getType($arg3) === 'string') {
+                        // Сравнение для строк
+                        $result = $frameManager->getValue($arg2) === $frameManager->getValue($arg3);
+                    } else {
+                        throw new OperandTypeError();
+                    }
+                    $result= $result? 'true' : 'false';
+                    $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                    break;
+                    case 'AND':
+                        // Проверяем типы аргументов и преобразуем строковые значения в булевые
+                        if (self::checkArgument($arg2, 'bool',$frameManager) && self::checkArgument($arg3, 'bool',$frameManager)) {
+                            $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
+                            $value3 = $frameManager->getValue($arg3) === 'true' ? true : false;
+                            $result = $value2 && $value3;
+                        } else {
+                            throw new OperandTypeError();
+                        }
+                        $result= $result? 'true' : 'false';
+                        $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                        break;
+                    case 'OR':
+                        // Проверяем типы аргументов и преобразуем строковые значения в булевые
+                        if (self::checkArgument($arg2, 'bool',$frameManager) && self::checkArgument($arg3, 'bool',$frameManager)) {
+                            $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
+                            $value3 = $frameManager->getValue($arg3) === 'true' ? true : false;
+                            $result = $value2 || $value3;
+                        } else {
+                            throw new OperandTypeError();
+                        }
+                        $result= $result? 'true' : 'false';
+                        $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                        break;
+                    case 'NOT':
+                        // Проверяем тип аргумента и преобразуем строковое значение в булевое
+                        if (self::checkArgument($arg2, 'bool',$frameManager)) {
+                            $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
+                            $result = !$value2;
+                        } else {
+                            throw new OperandTypeError();
+                        }
+                        $result= $result? 'true' : 'false';
+                        $frameManager->updateVariable($arg1['value'], 'bool', $result);
+                        break;
+                case 'INT2CHAR':
+                    if (self::checkArgument($arg2, 'int',$frameManager)) {
+                        $charCode = intval($frameManager->getValue($arg2));
+                        if ($charCode < 0 || $charCode > 0x10FFFF) {
+                            throw new StringOperationError();
+                        }
+                        $char = mb_chr($charCode, 'UTF-8');
+                        $frameManager->updateVariable($arg1['value'], 'string', $char);
+                    } else {
+                        throw new OperandTypeError();
+                    }
+                    break;
+                case 'STRI2INT':
+                    if (self::checkArgument($arg2, 'string',$frameManager) && self::checkArgument($arg3, 'int',$frameManager)) {
+                        $str = $frameManager->getValue($arg2);
+                        $index = intval($arg3['value']);
+                        if ($index < 0 || $index >= mb_strlen($str, 'UTF-8')) {
+                            throw new StringOperationError();
+                        }
+                        $char = mb_substr($str, $index, 1, 'UTF-8');
+                        $charCode = mb_ord($char, 'UTF-8');
+                        $frameManager->updateVariable($arg1['value'], 'int', $charCode);
+                    } else {
+                        throw new OperandTypeError();
+                    }
+                    break;
+                }
+        }
+        catch(IPPException $e)
+        {
+            throw $e;
+        }
+    }
+
+
+    public static function checkArgument(array $arg, string $expectedType,FrameManager $frameManager): bool {
+        try
+        {
+            switch ($expectedType) {
+                case 'string':
+                    return $frameManager->getType($arg) === 'string';
+                case 'int':
+                    return $frameManager->getType($arg) === 'int';
+                case 'label':
+                    return $frameManager->getType($arg)=== 'label'; // Лейбл может быть только строкой
+                case 'bool':
+                    return $frameManager->getType($arg) === 'bool'; 
+                default:
+                    throw new OperandTypeError();
             }
+        }
+        catch(IPPException $e)
+        {
+            throw $e;
+        }
     }
 }

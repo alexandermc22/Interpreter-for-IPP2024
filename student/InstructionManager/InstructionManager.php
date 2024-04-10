@@ -60,16 +60,24 @@ class InstructionManager
     
     public function parseInstruction(array $instruction,JumpManager $jumpManager)
     {
+        // $this->frameManager->initializeVariable('GF@abc','var');
+        // // print_r( $this->frameManager->getGlobalFrame());
+        // $this->frameManager->updateVariable('GF@abc','int','3');
+        // // print_r( $this->frameManager->getGlobalFrame());
+        // $this->frameManager->initializeVariable('GF@bbb','var');
+        // $this->frameManager->updateVariable('GF@bbb','int','5');
+        // // print_r( $this->frameManager->getGlobalFrame());
+
         $opcode = $instruction['opcode'];
         
-            echo $opcode;
-            echo '  ';
+        //     echo $opcode;
+        //     echo '  ';
         if (in_array($opcode, $this->MemoryFrameArray)) {
             MemoryFrame::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->DataStackArray)) {
             DataStack::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->ArithmeticArray)) {
-            Arithmetic::handleInstruction($instruction, $jumpManager);
+            Arithmetic::handleInstruction($instruction, $jumpManager,$this->frameManager);
         } elseif (in_array($opcode, $this->IOArray)) {
             IO::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->StringArray)) {
@@ -83,5 +91,6 @@ class InstructionManager
         } else {
             throw new \Exception("Unknown opcode: $opcode");
         }
+        print_r( $this->frameManager->getGlobalFrame());
     }
 }

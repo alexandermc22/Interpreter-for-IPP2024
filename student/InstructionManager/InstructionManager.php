@@ -37,7 +37,7 @@ class InstructionManager
     {
         $this->frameManager = new FrameManager();
                 // Подпункт 5.4.1
-                $this->MemoryFrameArray = ['MOVE', 'CREATEFRAME', 'PUSHFRAME', 'POPFRAME','DEFVAR'];
+                $this->MemoryFrameArray = ['MOVE', 'CREATEFRAME', 'PUSHFRAME', 'POPFRAME','DEFVAR','RETURN','CALL'];
 
                 // Подпункт 5.4.2
                 $this->DataStackArray = ['PUSHS', 'POPS'];
@@ -55,7 +55,7 @@ class InstructionManager
                 $this->TypeArray = ['TYPE'];
         
                 // Подпункт 5.4.7
-                $this->ControlFlowArray = ['LABEL', 'JUMP', 'JUMPIFEQ', 'JUMPIFNEQ', 'EXIT','RETURN','CALL'];
+                $this->ControlFlowArray = ['LABEL', 'JUMP', 'JUMPIFEQ', 'JUMPIFNEQ', 'EXIT'];
         
                 // Подпункт 5.4.8
                 $this->DebugArray = ['DPRINT', 'BREAK'];

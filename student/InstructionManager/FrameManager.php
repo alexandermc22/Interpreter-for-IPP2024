@@ -30,7 +30,7 @@ class FrameManager
     public function pushFrame(): void
     {
         if (!$this->temporaryFrameIsDefined) {
-            throw new \Exception('Temporary frame is not defined.');
+            throw new MissingMemoryFrameError();
         }
 
         foreach ($this->temporaryFrame as $name => $variable) {
@@ -50,7 +50,7 @@ class FrameManager
     public function popFrame(): void
     {
         if ($this->localFrameStackCount === 0) {
-            throw new \Exception('No local frames to pop.');
+            throw new MissingMemoryFrameError();
         }
 
         // Удаляем элемент из вершины стека localFrames и добавляем его в temporaryFrame

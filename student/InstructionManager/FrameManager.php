@@ -217,7 +217,7 @@ class FrameManager
     
     }
 
-    public function updateVariable(string $name, string $type, string $value): void
+    public function updateVariable(string $name, string $type, $value): void
     {
         try
         {

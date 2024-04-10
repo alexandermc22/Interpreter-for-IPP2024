@@ -4,6 +4,8 @@ namespace IPP\Student\InstructionManager;
 
 use Exception;
 use IPP\Core\AbstractInterpreter;
+use IPP\Core\FileInputReader;
+use IPP\Core\StreamWriter;
 use IPP\Core\Exception\NotImplementedException;
 use IPP\Core\Exception\XMLException;
 use IPP\Student\XmlInterpreter\XmlInterpreter;
@@ -17,6 +19,7 @@ use IPP\Student\InstructionManager\InstructionsClasses\IO;
 use IPP\Student\InstructionManager\InstructionsClasses\MemoryFrame;
 use IPP\Student\InstructionManager\InstructionsClasses\StringOperations;
 use IPP\Student\InstructionManager\InstructionsClasses\TypeOperations;
+
 
 class InstructionManager
 {
@@ -58,14 +61,14 @@ class InstructionManager
                 $this->DebugArray = ['DPRINT', 'BREAK'];
     }
     
-    public function parseInstruction(array $instruction,JumpManager $jumpManager)
+    public function parseInstruction(array $instruction,JumpManager $jumpManager,FileInputReader $inputReader,StreamWriter $streamWriter)
     {
         // $this->frameManager->initializeVariable('GF@abc','var');
         // // print_r( $this->frameManager->getGlobalFrame());
-        // $this->frameManager->updateVariable('GF@abc','int','3');
+        // $this->frameManager->updateVariable('GF@abc','int',3);
         // // print_r( $this->frameManager->getGlobalFrame());
         // $this->frameManager->initializeVariable('GF@bbb','var');
-        // $this->frameManager->updateVariable('GF@bbb','int','5');
+        // $this->frameManager->updateVariable('GF@bbb','int',5);
         // // print_r( $this->frameManager->getGlobalFrame());
 
         $opcode = $instruction['opcode'];
@@ -73,13 +76,13 @@ class InstructionManager
         //     echo $opcode;
         //     echo '  ';
         if (in_array($opcode, $this->MemoryFrameArray)) {
-            MemoryFrame::handleInstruction($instruction, $jumpManager);
+            MemoryFrame::handleInstruction($instruction, $jumpManager,$this->frameManager);
         } elseif (in_array($opcode, $this->DataStackArray)) {
             DataStack::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->ArithmeticArray)) {
             Arithmetic::handleInstruction($instruction, $jumpManager,$this->frameManager);
         } elseif (in_array($opcode, $this->IOArray)) {
-            IO::handleInstruction($instruction, $jumpManager);
+            IO::handleInstruction($instruction, $inputReader,$this->frameManager, $streamWriter);
         } elseif (in_array($opcode, $this->StringArray)) {
             StringOperations::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->TypeArray)) {
@@ -91,6 +94,7 @@ class InstructionManager
         } else {
             throw new \Exception("Unknown opcode: $opcode");
         }
-        print_r( $this->frameManager->getGlobalFrame());
+        // $streamWriter->writeBool($this->frameManager->getValue($instruction['args']['arg1']));
+        // print_r( $this->frameManager->getGlobalFrame());
     }
 }

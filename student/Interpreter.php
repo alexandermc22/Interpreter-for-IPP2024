@@ -18,7 +18,7 @@ class Interpreter extends AbstractInterpreter
     public function execute(): int
     {
         $sourceReader = $this->source->getDOMDocument();
-
+        $inputReader = $this->input;
 
         try
         {
@@ -26,14 +26,14 @@ class Interpreter extends AbstractInterpreter
             $instructionManager = new InstructionManager();
             while ($instruction = $jumpManager->getNextInstruction()) 
             {
-                $instructionManager->parseInstruction($instruction,$jumpManager);
+                $instructionManager->parseInstruction($instruction,$jumpManager,$this->input,$this->stdout);
             }
         }
         catch (IPPException $e)
         {
             throw $e;
         }
-        // $inputReader = $this->input->readString();
+        
         // $this->stdout->writeString("stdout");
         // $this->stderr->writeString("stderr");
         // throw new NotImplementedException;

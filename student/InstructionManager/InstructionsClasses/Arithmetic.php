@@ -16,9 +16,9 @@ class Arithmetic
         {
             $arg1 = $instruction['args']['arg1'];
             $arg2 = $instruction['args']['arg2'];
-            $arg3 = $instruction['args']['arg3'];
             switch ($instruction['opcode']) {
                 case 'ADD':
+                    $arg3 = $instruction['args']['arg3'];
                     if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
                     {
                         $result= intval($frameManager->getValue($arg2)) + intval($frameManager->getValue($arg3));
@@ -30,6 +30,7 @@ class Arithmetic
                     }
                     break;
                 case 'SUB':
+                    $arg3 = $instruction['args']['arg3'];
                     if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
                     {
                         $result = intval($frameManager->getValue($arg2)) - intval($frameManager->getValue($arg3));
@@ -37,6 +38,7 @@ class Arithmetic
                     }
                     break;
                 case 'MUL':
+                    $arg3 = $instruction['args']['arg3'];
                     if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
                     {
                         $result = intval($frameManager->getValue($arg2)) * intval($frameManager->getValue($arg3));
@@ -44,6 +46,7 @@ class Arithmetic
                     }
                     break;
                 case 'IDIV':
+                    $arg3 = $instruction['args']['arg3'];
                     if(self::checkArgument($arg2,'int',$frameManager) && self::checkArgument($arg3,'int',$frameManager))
                     {
                         if(intval($frameManager->getValue($arg3)===0))
@@ -53,6 +56,7 @@ class Arithmetic
                     }
                     break;
                 case 'LT':
+                    $arg3 = $instruction['args']['arg3'];
                     // Проверяем типы аргументов
                     if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
                         // Сравнение для целых чисел
@@ -68,10 +72,11 @@ class Arithmetic
                     } else {
                         throw new OperandTypeError();
                     }
-                    $result= $result? 'true' : 'false';
+                    $result= $result? 1 : 0;
                     $frameManager->updateVariable($arg1['value'], 'bool', $result);
                     break;                    
                 case 'GT':
+                    $arg3 = $instruction['args']['arg3'];
                     // Проверяем типы аргументов
                     if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
                         // Сравнение для целых чисел
@@ -87,10 +92,11 @@ class Arithmetic
                     } else {
                         throw new OperandTypeError();
                     }
-                    $result= $result? 'true' : 'false';
+                    $result= $result? 1 : 0;
                     $frameManager->updateVariable($arg1['value'], 'bool', $result);
                     break;
                 case 'EQ':
+                    $arg3 = $instruction['args']['arg3'];
                         // Проверяем типы аргументов
                     if ($frameManager->getType($arg2) === 'int' && $frameManager->getType($arg3) === 'int') {
                         // Сравнение для целых чисел
@@ -104,10 +110,11 @@ class Arithmetic
                     } else {
                         throw new OperandTypeError();
                     }
-                    $result= $result? 'true' : 'false';
+                     $result= $result? 1 : 0;
                     $frameManager->updateVariable($arg1['value'], 'bool', $result);
                     break;
                     case 'AND':
+                        $arg3 = $instruction['args']['arg3'];
                         // Проверяем типы аргументов и преобразуем строковые значения в булевые
                         if (self::checkArgument($arg2, 'bool',$frameManager) && self::checkArgument($arg3, 'bool',$frameManager)) {
                             $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
@@ -116,10 +123,11 @@ class Arithmetic
                         } else {
                             throw new OperandTypeError();
                         }
-                        $result= $result? 'true' : 'false';
+                        $result= $result? 1 : 0;
                         $frameManager->updateVariable($arg1['value'], 'bool', $result);
                         break;
                     case 'OR':
+                        $arg3 = $instruction['args']['arg3'];
                         // Проверяем типы аргументов и преобразуем строковые значения в булевые
                         if (self::checkArgument($arg2, 'bool',$frameManager) && self::checkArgument($arg3, 'bool',$frameManager)) {
                             $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
@@ -128,10 +136,11 @@ class Arithmetic
                         } else {
                             throw new OperandTypeError();
                         }
-                        $result= $result? 'true' : 'false';
+                        $result= $result? 1 : 0;
                         $frameManager->updateVariable($arg1['value'], 'bool', $result);
                         break;
                     case 'NOT':
+                        $arg3 = $instruction['args']['arg3'];
                         // Проверяем тип аргумента и преобразуем строковое значение в булевое
                         if (self::checkArgument($arg2, 'bool',$frameManager)) {
                             $value2 = $frameManager->getValue($arg2) === 'true' ? true : false;
@@ -139,7 +148,7 @@ class Arithmetic
                         } else {
                             throw new OperandTypeError();
                         }
-                        $result= $result? 'true' : 'false';
+                        $result= $result? 1 : 0;
                         $frameManager->updateVariable($arg1['value'], 'bool', $result);
                         break;
                 case 'INT2CHAR':
@@ -155,6 +164,7 @@ class Arithmetic
                     }
                     break;
                 case 'STRI2INT':
+                    $arg3 = $instruction['args']['arg3'];
                     if (self::checkArgument($arg2, 'string',$frameManager) && self::checkArgument($arg3, 'int',$frameManager)) {
                         $str = $frameManager->getValue($arg2);
                         $index = intval($arg3['value']);

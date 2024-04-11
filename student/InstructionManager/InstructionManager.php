@@ -38,6 +38,7 @@ class InstructionManager
     public function __construct()
     {
         $this->frameManager = new FrameManager();
+        $this->stackManager = new StackManager();
                 // Подпункт 5.4.1
                 $this->MemoryFrameArray = ['MOVE', 'CREATEFRAME', 'PUSHFRAME', 'POPFRAME','DEFVAR','RETURN','CALL'];
 
@@ -86,7 +87,7 @@ class InstructionManager
         } elseif (in_array($opcode, $this->IOArray)) {
             IO::handleInstruction($instruction, $inputReader,$this->frameManager, $streamWriter);
         } elseif (in_array($opcode, $this->StringArray)) {
-            StringOperations::handleInstruction($instruction, $jumpManager);
+            StringOperations::handleInstruction($instruction, $this->frameManager);
         } elseif (in_array($opcode, $this->TypeArray)) {
             TypeOperations::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->ControlFlowArray)) {

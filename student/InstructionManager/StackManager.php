@@ -2,15 +2,8 @@
 
 namespace IPP\Student\InstructionManager;
 
-use Exception;
-use IPP\Core\AbstractInterpreter;
-use IPP\Core\Exception\NotImplementedException;
-use IPP\Core\Exception\XMLException;
-use IPP\Student\XmlInterpreter\XmlInterpreter;
+
 use IPP\Core\Exception\IPPException;
-use IPP\Student\Exception\UndefinedLabelError;
-use IPP\Student\Exception\MissingMemoryFrameError;
-use IPP\Student\Exception\NonExistingVariableError;
 use IPP\Student\Exception\MissingValueError;
 
 

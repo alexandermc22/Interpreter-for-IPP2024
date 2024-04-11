@@ -1,7 +1,6 @@
 <?php
 
 namespace IPP\Student\InstructionManager\InstructionsClasses;
-use IPP\Student\InstructionManager\JumpManager;
 use IPP\Core\Exception\IPPException;
 use IPP\Core\FileInputReader;
 use IPP\Student\InstructionManager\FrameManager;

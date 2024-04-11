@@ -3,10 +3,8 @@
 namespace IPP\Student\InstructionManager\InstructionsClasses;
 use IPP\Student\InstructionManager\JumpManager;
 use IPP\Core\Exception\IPPException;
-use IPP\Core\FileInputReader;
 use IPP\Student\InstructionManager\FrameManager;
 use IPP\Student\Exception\OperandTypeError;
-use IPP\Core\StreamWriter;
 class MemoryFrame
 {
     public static function handleInstruction(array $instruction, JumpManager $jumpManager,FrameManager $frameManager)

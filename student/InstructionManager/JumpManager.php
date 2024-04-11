@@ -9,6 +9,7 @@ use IPP\Core\Exception\NotImplementedException;
 use IPP\Core\Exception\XMLException;
 use IPP\Student\XmlInterpreter\XmlInterpreter;
 use IPP\Core\Exception\IPPException;
+use IPP\Student\Exception\MissingMemoryFrameError;
 class JumpManager
 {
     protected array $interpreterStack = [];
@@ -29,6 +30,15 @@ class JumpManager
         }
     }
 
+    public function isExist(string $label): bool
+    {
+        if (in_array($label, $this->processedLabels)) {
+            return true;
+        }
+        else
+        {return false;}
+    }
+
     public function getNextInstruction(): ?array
     {
         try
@@ -45,7 +55,7 @@ class JumpManager
     public function call(string $label): void
     {
         if (in_array($label, $this->processedLabels)) {
-            throw new \Exception("Label '$label' already defined.");
+            throw new MissingMemoryFrameError();
         }
         $instructions = new XmlInterpreter($this->xmlDocument);
         $found = false;
@@ -58,7 +68,7 @@ class JumpManager
         }
 
         if (!$found) {
-            throw new \Exception("Label '$label' not found.");
+            throw new MissingMemoryFrameError();
         }
         $this->processedLabels[] = $label;
         array_push($this->interpreterStack, $instructions);
@@ -70,14 +80,14 @@ class JumpManager
         if (count($this->interpreterStack) >= 2) {
             array_pop($this->interpreterStack);
         } else {
-            throw new \Exception('Stack must have at least two elements.');
+            throw new MissingMemoryFrameError();
         }
     }
 
     public function jump(string $label): void
     {
         if (in_array($label, $this->processedLabels)) {
-            throw new \Exception("Label '$label' already defined.");
+            throw new MissingMemoryFrameError();
         }
         $instructions = new XmlInterpreter($this->xmlDocument);
         $found = false;
@@ -90,7 +100,7 @@ class JumpManager
         }
 
         if (!$found) {
-            throw new \Exception("Label '$label' not found.");
+            throw new MissingMemoryFrameError();
         }
         $this->processedLabels[] = $label;
         $this->interpreterStack[count($this->interpreterStack) - 1] = $instructions;

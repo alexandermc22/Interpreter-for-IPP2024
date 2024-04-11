@@ -26,7 +26,11 @@ class Interpreter extends AbstractInterpreter
             $instructionManager = new InstructionManager();
             while ($instruction = $jumpManager->getNextInstruction()) 
             {
-                $instructionManager->parseInstruction($instruction,$jumpManager,$this->input,$this->stdout);
+                $result= $instructionManager->parseInstruction($instruction,$jumpManager,$this->input,$this->stdout,$this->stderr);
+                if ($result>=0 && $result <=9)
+                        {
+                            return $result;
+                        }
             }
         }
         catch (IPPException $e)

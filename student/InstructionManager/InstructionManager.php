@@ -64,7 +64,7 @@ class InstructionManager
                 $this->DebugArray = ['DPRINT', 'BREAK'];
     }
     
-    public function parseInstruction(array $instruction,JumpManager $jumpManager,FileInputReader $inputReader,StreamWriter $streamWriter)
+    public function parseInstruction(array $instruction,JumpManager $jumpManager,FileInputReader $inputReader,StreamWriter $streamWriter,StreamWriter $errorWriter):int
     {
         // $this->frameManager->initializeVariable('GF@abc','var');
         // // print_r( $this->frameManager->getGlobalFrame());
@@ -91,12 +91,17 @@ class InstructionManager
         } elseif (in_array($opcode, $this->TypeArray)) {
             TypeOperations::handleInstruction($instruction,  $this->frameManager);
         } elseif (in_array($opcode, $this->ControlFlowArray)) {
-            ControlFlow::handleInstruction($instruction, $jumpManager);
+            $result = ControlFlow::handleInstruction($instruction, $jumpManager,$this->frameManager);
+            if ($result>=0 && $result <=9)
+                        {
+                            return $result;
+                        }
         } elseif (in_array($opcode, $this->DebugArray)) {
-            Debug::handleInstruction($instruction, $jumpManager);
+            Debug::handleInstruction($instruction, $this->frameManager,$errorWriter);
         } else {
             throw new \Exception("Unknown opcode: $opcode");
         }
+        return -1;
         // $streamWriter->writeBool($this->frameManager->getValue($instruction['args']['arg1']));
         // print_r( $this->frameManager->getGlobalFrame());
     }

@@ -12,6 +12,7 @@ use IPP\Student\Exception\UndefinedLabelError;
 use IPP\Student\Exception\MissingMemoryFrameError;
 use IPP\Student\Exception\NonExistingVariableError;
 use IPP\Student\Exception\MissingValueError;
+use IPP\Student\Exception\OperandTypeError;
 class FrameManager
 {
     protected array $localFrames = [];
@@ -147,7 +148,7 @@ class FrameManager
             }
             $this->temporaryFrame[$name] = ['name' => $name, 'type' => $type, 'value' => null];
         } else {
-            throw new Exception('Invalid frame name format.');
+            throw new OperandTypeError();
         }
     }
 
@@ -177,7 +178,7 @@ class FrameManager
     //     }
     // }
 
-    public function getValue(array $arg): string
+    public function getValue(array $arg)
     {
         try{
 
@@ -243,7 +244,7 @@ class FrameManager
                 }
                 $this->temporaryFrame[$name] = ['name' => $name, 'type' => $type, 'value' => $value];
             } else {
-                throw new Exception('Invalid frame name format.');
+                throw new OperandTypeError();
             }
         }
         catch(IPPException $e)

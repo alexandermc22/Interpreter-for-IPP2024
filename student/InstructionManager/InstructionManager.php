@@ -89,7 +89,7 @@ class InstructionManager
         } elseif (in_array($opcode, $this->StringArray)) {
             StringOperations::handleInstruction($instruction, $this->frameManager);
         } elseif (in_array($opcode, $this->TypeArray)) {
-            TypeOperations::handleInstruction($instruction, $jumpManager);
+            TypeOperations::handleInstruction($instruction,  $this->frameManager);
         } elseif (in_array($opcode, $this->ControlFlowArray)) {
             ControlFlow::handleInstruction($instruction, $jumpManager);
         } elseif (in_array($opcode, $this->DebugArray)) {

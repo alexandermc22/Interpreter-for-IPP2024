@@ -17,11 +17,10 @@ class Interpreter extends AbstractInterpreter
 {
     public function execute(): int
     {
-        $sourceReader = $this->source->getDOMDocument();
-        $inputReader = $this->input;
-
+        
         try
         {
+            $sourceReader = $this->source->getDOMDocument();
             $jumpManager = new JumpManager($sourceReader);
             $instructionManager = new InstructionManager();
             while ($instruction = $jumpManager->getNextInstruction()) 

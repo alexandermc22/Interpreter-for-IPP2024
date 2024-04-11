@@ -116,7 +116,16 @@ class Arithmetic
                     } elseif ($frameManager->getType($arg2)=== 'string' && $frameManager->getType($arg3) === 'string') {
                         // Сравнение для строк
                         $result = $frameManager->getValue($arg2) === $frameManager->getValue($arg3);
-                    } else {
+                    } 
+                    elseif ($frameManager->getType($arg2)=== 'nil' && $frameManager->getType($arg3) !== 'nil' && $frameManager->getType($arg3) !== 'var') {
+                        // Сравнение для строк
+                        $result = false;
+                    }
+                    elseif ($frameManager->getType($arg2)=== 'nil' && ($frameManager->getType($arg3) === 'nil' || $frameManager->getType($arg3) === 'var')) {
+                        // Сравнение для строк
+                        $result = true;
+                    }
+                    else {
                         throw new OperandTypeError();
                     }
                      $result= $result? 1 : 0;

@@ -1,6 +1,7 @@
 <?php
 
 namespace IPP\Student\InstructionManager;
+
 use IPP\Student\Exception\UnexpectedXMLError;
 use Exception;
 use Throwable;
@@ -10,6 +11,8 @@ use IPP\Core\Exception\XMLException;
 use IPP\Student\XmlInterpreter\XmlInterpreter;
 use IPP\Core\Exception\IPPException;
 use IPP\Student\Exception\MissingMemoryFrameError;
+use IPP\Student\Exception\UndefinedLabelError;
+
 class JumpManager
 {
     protected array $interpreterStack = [];
@@ -18,14 +21,11 @@ class JumpManager
 
     public function __construct(\DOMDocument $xmlDocument)
     {
-        try
-        {
+        try {
             $this->xmlDocument = $xmlDocument;
             $instructions = new XmlInterpreter($xmlDocument);
             $this->interpreterStack[] = $instructions;
-        }
-        catch (IPPException $e)
-        {
+        } catch (IPPException $e) {
             throw $e;
         }
     }
@@ -34,19 +34,16 @@ class JumpManager
     {
         if (in_array($label, $this->processedLabels)) {
             return true;
+        } else {
+            return false;
         }
-        else
-        {return false;}
     }
 
     public function getNextInstruction(): ?array
     {
-        try
-        {
+        try {
             $instruction = end($this->interpreterStack);
-        }
-        catch (IPPException $e)
-        {
+        } catch (IPPException $e) {
             throw $e;
         }
         return $instruction->getParseInstruction();
@@ -54,24 +51,26 @@ class JumpManager
 
     public function call(string $label): void
     {
-        if (in_array($label, $this->processedLabels)) {
-            throw new MissingMemoryFrameError();
-        }
-        $instructions = new XmlInterpreter($this->xmlDocument);
-        $found = false;
 
-        while ($instruction = $instructions->getParseInstruction()) {
-            if ($instruction['opcode'] === 'LABEL' && $instruction['args']['arg1']['value'] === $label) {
-                $found = true;
-                break;
+        try {
+            $instructions = new XmlInterpreter($this->xmlDocument);
+            $found = false;
+
+            while ($instruction = $instructions->getParseInstruction()) {
+                if ($instruction['opcode'] === 'LABEL' && $instruction['args']['arg1']['value'] === $label) {
+                    $found = true;
+                    break;
+                }
             }
-        }
 
-        if (!$found) {
-            throw new MissingMemoryFrameError();
+            if (!$found) {
+                throw new UndefinedLabelError();
+            }
+            $this->processedLabels[] = $label;
+            array_push($this->interpreterStack, $instructions);
+        } catch (IPPException $e) {
+            throw $e;
         }
-        $this->processedLabels[] = $label;
-        array_push($this->interpreterStack, $instructions);
     }
 
     public function return(): void
@@ -86,24 +85,24 @@ class JumpManager
 
     public function jump(string $label): void
     {
-        if (in_array($label, $this->processedLabels)) {
-            throw new MissingMemoryFrameError();
-        }
-        $instructions = new XmlInterpreter($this->xmlDocument);
-        $found = false;
+        try {
+            $instructions = new XmlInterpreter($this->xmlDocument);
+            $found = false;
 
-        while ($instruction = $instructions->getParseInstruction()) {
-            if ($instruction['opcode'] === 'LABEL' && $instruction['args']['arg1']['value'] === $label) {
-                $found = true;
-                break;
+            while ($instruction = $instructions->getParseInstruction()) {
+                if ($instruction['opcode'] === 'LABEL' && $instruction['args']['arg1']['value'] === $label) {
+                    $found = true;
+                    break;
+                }
             }
-        }
 
-        if (!$found) {
-            throw new MissingMemoryFrameError();
+            if (!$found) {
+                throw new UndefinedLabelError();
+            }
+            $this->processedLabels[] = $label;
+            $this->interpreterStack[count($this->interpreterStack) - 1] = $instructions;
+        } catch (IPPException $e) {
+            throw $e;
         }
-        $this->processedLabels[] = $label;
-        $this->interpreterStack[count($this->interpreterStack) - 1] = $instructions;
     }
-
 }

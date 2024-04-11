@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <!-- Определяем типы данных для arg элементов -->
+  <!-- Define data types for arg elements -->
   <xs:complexType name="argType">
     <xs:simpleContent>
       <xs:extension base="xs:string">
@@ -10,31 +10,25 @@
     </xs:simpleContent>
   </xs:complexType>
 
-  <!-- Определяем структуру инструкции -->
+  <!-- Define the structure of the instruction -->
   <xs:element name="instruction">
     <xs:complexType>
       <xs:sequence>
-        <!-- Первый аргумент -->
         <xs:element name="arg1" type="argType" minOccurs="0"/>
-        <!-- Второй аргумент -->
         <xs:element name="arg2" type="argType" minOccurs="0"/>
-        <!-- Третий аргумент -->
         <xs:element name="arg3" type="argType" minOccurs="0"/>
       </xs:sequence>
-      <!-- Атрибуты инструкции -->
       <xs:attribute name="order" type="xs:integer" use="required"/>
       <xs:attribute name="opcode" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 
-  <!-- Определяем корневой элемент программы -->
+  <!-- Define the root element of the program -->
   <xs:element name="program">
     <xs:complexType>
       <xs:sequence>
-        <!-- Список инструкций -->
         <xs:element ref="instruction" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
-      <!-- Атрибут языка программы -->
       <xs:attribute name="language" type="xs:string" fixed="IPPcode24" use="required"/>
     </xs:complexType>
   </xs:element>

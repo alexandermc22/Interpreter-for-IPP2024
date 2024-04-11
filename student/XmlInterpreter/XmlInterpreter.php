@@ -3,7 +3,6 @@
 namespace IPP\Student\XmlInterpreter;
 
 use IPP\Student\Exception\UnexpectedXMLError;
-use Throwable;
 class XmlInterpreter
 {
     protected \DOMDocument $xmlDocument;
@@ -30,11 +29,11 @@ class XmlInterpreter
 
     public function getParseInstruction(): ?array
     {
-            // Проверяем, есть ли следующая инструкция
+                    // Check if the following instruction exists
         if ($this->currentIndex < $this->instructionNodes->length) {
             $instructionNode = $this->instructionNodes->item($this->currentIndex);
 
-            // Приводим $instructionNode к типу DOMElement
+            // Set $instructionNode to DOMElement type
             if ($instructionNode instanceof \DOMElement) {
                 $this->currentIndex++;
                 $order = $instructionNode->getAttribute('order');
@@ -66,6 +65,6 @@ class XmlInterpreter
                 return ['order' => $order, 'opcode' => $opcode, 'args' => $args];
             }
         }
-        return null; // Все инструкции пройдены или некорректный формат узла
+        return null; // All instructions passed or incorrect node format
     }
 }

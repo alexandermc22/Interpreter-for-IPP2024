@@ -5,7 +5,8 @@ use IPP\Student\InstructionManager\FrameManager;
 use IPP\Core\Exception\IPPException;
 class TypeOperations
 {
-    public static function handleInstruction(array $instruction, FrameManager $frameManager)
+    /** @param array<string, mixed> $instruction The instruction to parse. **/
+    public static function handleInstruction(array $instruction, FrameManager $frameManager) :void
     {
         try
         {

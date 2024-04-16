@@ -7,7 +7,8 @@ use IPP\Student\InstructionManager\FrameManager;
 use IPP\Student\Exception\OperandTypeError;
 class MemoryFrame
 {
-    public static function handleInstruction(array $instruction, JumpManager $jumpManager,FrameManager $frameManager)
+    /** @param array<string, mixed> $instruction The instruction to parse. **/
+    public static function handleInstruction(array $instruction, JumpManager $jumpManager,FrameManager $frameManager) :void
     {
         try
         {

@@ -12,11 +12,11 @@ class StringOperations
     /**
      * Handles string-related instructions such as CONCAT, STRLEN, GETCHAR, and SETCHAR.
      *
-     * @param array $instruction The instruction to be processed.
+     * @param array<string, mixed> $instruction The instruction to parse.
      * @param FrameManager $frameManager An instance of FrameManager.
      * @throws IPPException If an IPP exception occurs during instruction processing.
      */
-    public static function handleInstruction(array $instruction, FrameManager $frameManager)
+    public static function handleInstruction(array $instruction, FrameManager $frameManager) :void
     {
         try {
             $arg1 = $instruction['args']['arg1'];

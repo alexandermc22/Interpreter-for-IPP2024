@@ -11,8 +11,14 @@ use IPP\Student\Exception\UndefinedLabelError;
 
 class JumpManager
 {
+    /**
+     * @var array<XmlInterpreter>
+     */
     protected array $interpreterStack = [];
     protected \DOMDocument $xmlDocument;
+    /**
+     * @var array<string>
+     */
     protected array $processedLabels = [];
 
     /**
@@ -47,7 +53,7 @@ class JumpManager
     /**
      * Get the next instruction from the interpreter stack.
      *
-     * @return array|null The next instruction array or null if stack is empty.
+     * @return  array{'order': int, 'opcode': string,'args': array{'type': string,'value': mixed} }
      * @throws IPPException If an IPP exception occurs during retrieval.
      */
     public function getNextInstruction(): ?array

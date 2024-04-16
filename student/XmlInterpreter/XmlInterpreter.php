@@ -8,6 +8,9 @@ use IPP\Student\Exception\UnexpectedXMLError;
 class XmlInterpreter
 {
     protected \DOMDocument $xmlDocument;
+    /**
+     * @var \DOMNodeList<\DOMNode>|null $instructionNodes A list of DOMNode objects representing instructions.
+     */
     protected ?\DOMNodeList $instructionNodes;
     protected int $currentIndex;
     protected int $currentOrder = 0;
@@ -33,6 +36,11 @@ class XmlInterpreter
         return $xmlDocument->schemaValidate($xsdPath);
     }
 
+    /**
+     * Get the next instruction from the interpreter stack.
+     *
+     * @return array<string, mixed>|null The next instruction array or null if stack is empty.
+     */
     public function getParseInstruction(): ?array
     {
         // Check if the following instruction exists

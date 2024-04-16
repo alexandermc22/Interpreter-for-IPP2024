@@ -6,7 +6,15 @@ use IPP\Student\InstructionManager\StackManager;
 use IPP\Core\Exception\IPPException;
 class DataStack
 {
-    public static function handleInstruction(array $instruction, StackManager $stackManager,FrameManager $frameManager)
+    /**
+     * Handle control flow instructions such as LABEL, JUMP, JUMPIFEQ, JUMPIFNEQ, and EXIT.
+     *
+     * @param array<string, mixed> $instruction The instruction to parse.
+     * @param StackManager $stackManager The JumpManager instance.
+     * @param FrameManager $frameManager The FrameManager instance.
+     * @throws IPPException If an IPP exception occurs during handling the instruction.
+     */
+    public static function handleInstruction(array $instruction, StackManager $stackManager,FrameManager $frameManager):void
     {
         $arg1 = $instruction['args']['arg1'];
         try

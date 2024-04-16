@@ -9,6 +9,11 @@ use IPP\Student\Exception\MissingValueError;
 
 class StackManager
 {
+
+    /**
+     * @var array<mixed,string>[] Stack array containing elements.
+     * Each element in the stack is represented as an associative array with keys 'type' and 'value'.
+     */
     private $stack;
 
     public function __construct()
@@ -16,7 +21,8 @@ class StackManager
         $this->stack = [];
     }
 
-    public function push(array $arg,FrameManager $frameManager)
+    /** @param array{name: string, type: string, value: mixed} $arg args **/
+    public function push(array $arg,FrameManager $frameManager):void
     {
         try
         {
@@ -29,8 +35,8 @@ class StackManager
             throw $e;
         }
     }
-
-    public function pop(array $arg,FrameManager $frameManager)
+/** @param array{name: string, type: string, value: mixed} $arg args **/
+    public function pop(array $arg,FrameManager $frameManager):void
     {
         try
         {
@@ -46,7 +52,8 @@ class StackManager
         }
     }
 
-    public function top()
+    /** @return array<mixed,string> **/
+    public function top(): array
     {
         if ($this->isEmpty()) {
             throw new MissingValueError();
@@ -54,7 +61,7 @@ class StackManager
         return end($this->stack);
     }
 
-    public function isEmpty()
+    public function isEmpty() : bool
     {
         return empty($this->stack);
     }

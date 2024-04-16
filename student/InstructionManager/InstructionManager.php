@@ -23,13 +23,21 @@ class InstructionManager
 {
     protected FrameManager $frameManager;
     protected StackManager $stackManager;
+    /** @var array<string> **/
     protected array $MemoryFrameArray = [];
+    /** @var array<string> **/
     protected array $DataStackArray = [];
+    /** @var array<string> **/
     protected array $ArithmeticArray = [];
+    /** @var array<string> **/
     protected array $IOArray = [];
+    /** @var array<string> **/
     protected array $StringArray = [];
+    /** @var array<string> **/
     protected array $TypeArray = [];
+    /** @var array<string> **/
     protected array $ControlFlowArray = [];
+    /** @var array<string> **/
     protected array $DebugArray = [];
 
     public function __construct()
@@ -48,17 +56,17 @@ class InstructionManager
         $this->DebugArray = ['DPRINT', 'BREAK'];
     }
 
-    /**
-     * Parse and handle the given instruction.
-     *
-     * @param array $instruction The instruction to parse.
-     * @param JumpManager $jumpManager The jump manager.
-     * @param InputReader $inputReader The input reader.
-     * @param OutputWriter $streamWriter The stream writer for output.
-     * @param OutputWriter $errorWriter The stream writer for error messages.
-     * @return int The result of handling the instruction.
-     * @throws OperandTypeError If an invalid operand type is encountered.
-     */
+   /**
+ * Parse and handle the given instruction.
+ *
+ * @param array<string, mixed> $instruction The instruction to parse.
+ * @param JumpManager $jumpManager The jump manager.
+ * @param InputReader $inputReader The input reader.
+ * @param OutputWriter $streamWriter The stream writer for output.
+ * @param OutputWriter $errorWriter The stream writer for error messages.
+ * @return int The result of handling the instruction.
+ * @throws OperandTypeError If an invalid operand type is encountered.
+ */
     public function parseInstruction(array $instruction, JumpManager $jumpManager, InputReader $inputReader, OutputWriter $streamWriter, OutputWriter $errorWriter): int
     {
         $opcode = $instruction['opcode'];

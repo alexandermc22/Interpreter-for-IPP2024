@@ -14,12 +14,12 @@ class Arithmetic
     /**
      * Handle arithmetic instructions like ADD, SUB, MUL, IDIV, LT, GT, EQ, AND, OR, NOT, INT2CHAR, and STRI2INT.
      *
-     * @param array $instruction The instruction array containing opcode and arguments.
+     * @param array<string, mixed> $instruction The instruction to parse.
      * @param JumpManager $jumpManager The JumpManager instance.
      * @param FrameManager $frameManager The FrameManager instance.
      * @throws IPPException If an IPP exception occurs during instruction handling.
      */
-    public static function handleInstruction(array $instruction, JumpManager $jumpManager, FrameManager $frameManager)
+    public static function handleInstruction(array $instruction, JumpManager $jumpManager, FrameManager $frameManager) : void
     {
         try {
             $arg1 = $instruction['args']['arg1'];
@@ -193,7 +193,7 @@ class Arithmetic
     /**
      * Check if the argument matches the expected type.
      *
-     * @param array $arg The argument array.
+     * @param array{name: string, type: string, value: mixed} $arg args
      * @param string $expectedType The expected type of the argument.
      * @param FrameManager $frameManager The FrameManager instance.
      * @return bool True if the argument matches the expected type, false otherwise.

@@ -8,7 +8,8 @@ use IPP\Student\Exception\OperandTypeError;
 
 class Debug
 {
-    public static function handleInstruction(array $instruction, FrameManager $frameManager,OutputWriter $errorWriter)
+    /** @param array<string, mixed> $instruction The instruction to parse. **/
+    public static function handleInstruction(array $instruction, FrameManager $frameManager,OutputWriter $errorWriter) :void
     {
         try
         {

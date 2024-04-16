@@ -9,7 +9,8 @@ use IPP\Student\Exception\OperandTypeError;
 use IPP\Core\StreamWriter;
 class IO
 {
-    public static function handleInstruction(array $instruction, InputReader $inputReader,FrameManager $frameManager,OutputWriter $streamWriter)
+    /** @param array<string, mixed> $instruction The instruction to parse. **/
+    public static function handleInstruction(array $instruction, InputReader $inputReader,FrameManager $frameManager,OutputWriter $streamWriter) : void
     {
         $arg1 = $instruction['args']['arg1'];
         

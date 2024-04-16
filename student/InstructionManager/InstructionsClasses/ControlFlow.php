@@ -14,7 +14,7 @@ class ControlFlow
     /**
      * Handle control flow instructions such as LABEL, JUMP, JUMPIFEQ, JUMPIFNEQ, and EXIT.
      *
-     * @param array $instruction The instruction to handle.
+     * @param array<string, mixed> $instruction The instruction to parse.
      * @param JumpManager $jumpManager The JumpManager instance.
      * @param FrameManager $frameManager The FrameManager instance.
      * @return int The result of the control flow operation if applicable, or -1 if no result.

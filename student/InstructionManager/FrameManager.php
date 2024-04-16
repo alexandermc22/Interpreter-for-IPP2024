@@ -10,12 +10,15 @@ use IPP\Student\Exception\OperandTypeError;
 
 class FrameManager
 {
+    /** @var array<int|string, array{name: string, type: string|null, value: mixed}> */
     protected array $localFrames = [];
     protected int $localFrameStackCount = 0;
+    /** @var array<string, array{name: string, type: string|null, value: mixed}> */
     protected array $globalFrame = [];
+    /** @var array<string, array{name: string, type: string|null, value: mixed}> */
     protected array $temporaryFrame = [];
     protected bool $temporaryFrameIsDefined = false;
-    
+
     public function createFrame(): void
     {
         $this->temporaryFrameIsDefined = true;
@@ -46,7 +49,7 @@ class FrameManager
         if ($this->localFrameStackCount === 0) {
             throw new MissingMemoryFrameError();
         }
-        $localFrameReplaced=[];
+        $localFrameReplaced = [];
         $lastLocalFrame = array_pop($this->localFrames);
 
         // Convert the localFrame keys from L to T
@@ -60,6 +63,10 @@ class FrameManager
         $this->localFrameStackCount--;
     }
 
+    /**
+     * @return mixed
+     * @throws IPPException
+     */
     public function getVariableByName(string $name)
     {
         $variable = null;
@@ -120,6 +127,11 @@ class FrameManager
         }
     }
 
+    /**
+     * @param array{name: string, type: string, value: mixed} $arg
+     * @return mixed
+     * @throws IPPException
+     */
     public function getValue(array $arg)
     {
         try {
@@ -134,6 +146,11 @@ class FrameManager
         }
     }
 
+    /**
+     * @param array{name: string, type: string, value: mixed} $arg
+     * @return string
+     * @throws IPPException
+     */
     public function getType(array $arg): string
     {
         try {
@@ -148,6 +165,12 @@ class FrameManager
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $type
+     * @param mixed $value
+     * @throws IPPException
+     */
     public function updateVariable(string $name, string $type, $value): void
     {
         try {
@@ -178,16 +201,25 @@ class FrameManager
         }
     }
 
+    /**
+     * @return array<string, array{name: string, type: string|null, value: mixed}>
+     */
     public function getGlobalFrame(): array
     {
         return $this->globalFrame;
     }
 
+    /**
+     * @return array<array{name: string, type: string|null, value: mixed}>
+     */
     public function getLocalFrames(): array
     {
         return $this->localFrames;
     }
 
+    /**
+     * @return array<string, array{name: string, type: string|null, value: mixed}>
+     */
     public function getTemporaryFrame(): array
     {
         return $this->temporaryFrame;

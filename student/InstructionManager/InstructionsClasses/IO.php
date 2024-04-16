@@ -2,13 +2,14 @@
 
 namespace IPP\Student\InstructionManager\InstructionsClasses;
 use IPP\Core\Exception\IPPException;
-use IPP\Core\FileInputReader;
+use IPP\Core\Interface\InputReader;
+use IPP\Core\Interface\OutputWriter;
 use IPP\Student\InstructionManager\FrameManager;
 use IPP\Student\Exception\OperandTypeError;
 use IPP\Core\StreamWriter;
 class IO
 {
-    public static function handleInstruction(array $instruction, FileInputReader $inputReader,FrameManager $frameManager,StreamWriter $streamWriter)
+    public static function handleInstruction(array $instruction, InputReader $inputReader,FrameManager $frameManager,OutputWriter $streamWriter)
     {
         $arg1 = $instruction['args']['arg1'];
         

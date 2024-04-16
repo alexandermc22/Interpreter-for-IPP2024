@@ -24,6 +24,7 @@ class FrameManager
 
     public function pushFrame(): void
     {
+        $temporaryFrameReplaced = [];
         if (!$this->temporaryFrameIsDefined) {
             throw new MissingMemoryFrameError();
         }
@@ -45,7 +46,7 @@ class FrameManager
         if ($this->localFrameStackCount === 0) {
             throw new MissingMemoryFrameError();
         }
-
+        $localFrameReplaced=[];
         $lastLocalFrame = array_pop($this->localFrames);
 
         // Convert the localFrame keys from L to T

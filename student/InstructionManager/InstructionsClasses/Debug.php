@@ -2,13 +2,13 @@
 
 namespace IPP\Student\InstructionManager\InstructionsClasses;
 use IPP\Student\InstructionManager\FrameManager;
-use IPP\Core\StreamWriter;
+use IPP\Core\Interface\OutputWriter;
 use IPP\Core\Exception\IPPException;
 use IPP\Student\Exception\OperandTypeError;
 
 class Debug
 {
-    public static function handleInstruction(array $instruction, FrameManager $frameManager,StreamWriter $errorWriter)
+    public static function handleInstruction(array $instruction, FrameManager $frameManager,OutputWriter $errorWriter)
     {
         try
         {

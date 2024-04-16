@@ -2,6 +2,9 @@
 
 namespace IPP\Student\InstructionManager;
 
+use IPP\Core\Interface\InputReader;
+use IPP\Core\Interface\OutputWriter;
+use IPP\Core\Interface\SourceReader;
 use IPP\Core\FileInputReader;
 use IPP\Core\StreamWriter;
 use IPP\Student\InstructionManager\FrameManager;
@@ -50,13 +53,13 @@ class InstructionManager
      *
      * @param array $instruction The instruction to parse.
      * @param JumpManager $jumpManager The jump manager.
-     * @param FileInputReader $inputReader The input reader.
-     * @param StreamWriter $streamWriter The stream writer for output.
-     * @param StreamWriter $errorWriter The stream writer for error messages.
+     * @param InputReader $inputReader The input reader.
+     * @param OutputWriter $streamWriter The stream writer for output.
+     * @param OutputWriter $errorWriter The stream writer for error messages.
      * @return int The result of handling the instruction.
      * @throws OperandTypeError If an invalid operand type is encountered.
      */
-    public function parseInstruction(array $instruction, JumpManager $jumpManager, FileInputReader $inputReader, StreamWriter $streamWriter, StreamWriter $errorWriter): int
+    public function parseInstruction(array $instruction, JumpManager $jumpManager, InputReader $inputReader, OutputWriter $streamWriter, OutputWriter $errorWriter): int
     {
         $opcode = $instruction['opcode'];
         if (in_array($opcode, $this->MemoryFrameArray)) {

@@ -47,7 +47,7 @@ class XmlInterpreter
                 if ($order <= $this->currentOrder) {
                     throw new UnexpectedXMLError();
                 }
-                $this->currentOrder = $order;
+                $this->currentOrder = intval($order);
                 $opcode = strtoupper($instructionNode->getAttribute('opcode'));
                 $args = [];
 
